@@ -98,28 +98,65 @@
 //
 // console.log(testArr.reduce(reducer, []))
 
-const arrList = [1, 2, 3, 4, 5, 6, [1, 2, 3, [2, 3, 4]]]
-// console.log([].concat(...arrList), ...arrList)
-const arrListCopy = [...arrList]
 
-// function flat(arrStart) {
-//   return arrStart.reduce((accumulator, currentValue) => {
-//     return accumulator.concat(currentValue instanceof Array ? flat(currentValue) : currentValue)
-//   }, [])
+// function Foo(name, age) {
+//     this.name = name;
+//     this.age = age
+// }
+//
+// Foo.prototype.getName = function () {
+//   return this.name
+// }
+//
+// function myNew (factoryFun, ...args) {
+//   const obj = Object.create(factoryFun.prototype)
+//
+//   const result = factoryFun.apply(obj, args)
+//
+//   return Object.prototype.toString.call(result) === '[object Object]' ? result : obj
+// }
+//
+// console.log(myNew(Foo, 'name1', 2).__proto__)
+
+// 原型链继承
+
+// function Parent() {
+//   this.name = 'Parent'
+// }
+//
+// Parent.prototype.getName = function () {
+//   return this.name
 // }
 
-// const result = arrList.reduce((accumulator, currentValue) => {
-//   if (currentValue instanceof Array) {
+// function Child() {
 //
-//   }
+// }
+//
+// Child.prototype = new Parent()
+// Child.prototype.constructor = Child
+//
+// const child = new Child()
+// console.log(child.__proto__ === Child.prototype)
 
-//   accumulator.concat(currentValue)
-//   console.log(accumulator, currentValue, '1')
-//   return accumulator + currentValue
-// }, [])
+function Parent(name = 'untitled') {
+  this.name = name
+}
 
-// console.log(flat(arrList))
+Parent.prototype.getName = function () {
+  return this.name
+}
 
+function Child(params) {
+  Parent.call(this, params)
+}
 
+Child.prototype = Object.create(Parent.prototype)
+Child.prototype.constructor = Child
 
+//测试
+const child = new Child()
+console.log(child.__proto__ === Child.prototype)
+const parent = new Parent()
+child.getName()                  // ['zhangsan']
+parent.getName()                 // 报错, 找不到getName()
 
